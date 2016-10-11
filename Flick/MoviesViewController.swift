@@ -22,7 +22,7 @@ class MoviesViewController: UIViewController {
     let highQualityImageBaseUrl  = "https://image.tmdb.org/t/p/original"
     var movies:[NSDictionary] =  []
     var filteredMovies:[NSDictionary] = []
-    
+    var endpoint:String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
