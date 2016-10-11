@@ -16,21 +16,23 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+
     
     let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
     let lowQualityImageBaseUrl = "https://image.tmdb.org/t/p/w45"
     let highQualityImageBaseUrl  = "https://image.tmdb.org/t/p/original"
     var movies:[NSDictionary] =  []
     var filteredMovies:[NSDictionary] = []
-    var endpoint:String!
+    var endpoint = String()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
+
+        initDelegate()
+        initUI()
+        
         searchBar.delegate = self
         
         loadMovie()
@@ -41,8 +43,25 @@ class MoviesViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    func initDelegate(){
+        tableView.delegate = self
+        tableView.dataSource = self
+        //        collectionView.delegate = self
+        //        collectionView.dataSource = self
+    }
+    
+    func initUI(){
+//        let oldSegmentedControlFrame = segmentedControl.frame
+//        let segmentedControlFrame = CGRect(x: oldSegmentedControlFrame.origin.x,
+//                                           y: oldSegmentedControlFrame.origin.y,
+//                                           width: oldSegmentedControlFrame.width,
+//                                           height: searchBar.frame.height)
+//        segmentedControl.frame = segmentedControlFrame
+        segmentedControl.frame.size.height = searchBar.frame.height
+    }
+    
     func loadMovie(){
-        let url = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)"
+        let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)"
         Alamofire
         .request(url)
         .validate()

@@ -56,10 +56,18 @@
                                 </prototypes>
                             </tableView>
                             <searchBar contentMode="redraw" misplaced="YES" id="chI-tR-gqc">
-                                <frame key="frameInset" height="44"/>
+                                <frame key="frameInset" height="44" maxX="79"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" apportionsSegmentWidthsByContent="YES" segmentControlStyle="plain" selectedSegmentIndex="1" id="cfk-PG-Bfg">
+                                <frame key="frameInset" minX="241" width="79" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="" image="list"/>
+                                    <segment title="" image="grid"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -67,6 +75,7 @@
                     <navigationItem key="navigationItem" id="wYR-kY-4NL"/>
                     <connections>
                         <outlet property="searchBar" destination="chI-tR-gqc" id="w7y-xn-wi5"/>
+                        <outlet property="segmentedControl" destination="cfk-PG-Bfg" id="rO9-lc-zYW"/>
                         <outlet property="tableView" destination="pPo-5O-8p7" id="aqN-g4-9oA"/>
                     </connections>
                 </viewController>
@@ -140,6 +149,10 @@
             <point key="canvasLocation" x="17" y="136"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="grid" width="25" height="25"/>
+        <image name="list" width="25" height="25"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
