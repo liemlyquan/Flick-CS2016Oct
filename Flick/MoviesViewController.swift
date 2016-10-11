@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import AlamofireImage
+import ARSLineProgress
 
 
 class MoviesViewController: UIViewController {
@@ -44,12 +45,34 @@ class MoviesViewController: UIViewController {
         let url = "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)"
         Alamofire
         .request(url)
+        .validate()
         .responseJSON { response in
-            
+            switch response.result {
+                case .success(_):
+                    if let data = response.data {
+                        if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                            if let results = responseDictionary["results"] as? [NSDictionary] {
+                                self.movies = results
+                                self.tableView.reloadData()
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    // MARK: Only print message "defined" error
+                    if let statusCode = response.response?.statusCode {
+                        if (400...499 ~=  statusCode){
+                            if let data = response.data {
+                                if let errorDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                                    if let errorMessage = errorDictionary["status_message"] as? String {
+                                        print(errorMessage)
+                                    }
+                                }
+                            }
+                        }
+                    }
+            }
         }
-        
-        
-        
     }
 }
 
@@ -67,9 +90,15 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
             cell.overviewLabel.text = overview
         }
         if let posterPath = movie["poster_path"] as? String {
-            let imageUrl = URL(string: "\(lowQualityImageBaseUrl)\(posterPath)")
-            if let url = imageUrl {
-                cell.posterImageView.af_setImage(withURL: url)
+            let lowImageQualityUrl = URL(string: "\(lowQualityImageBaseUrl)\(posterPath)")
+            let highImageQualityUrl = URL(string: "\(highQualityImageBaseUrl)\(posterPath)")
+            if let lowImageQualityUrl = lowImageQualityUrl {
+                cell.posterImageView.af_setImage(withURL: lowImageQualityUrl, completion: { response in
+                    // TODO: find some way to do it in cleaner way
+                    if let highImageQualityUrl = highImageQualityUrl {
+                        cell.posterImageView.af_setImage(withURL: highImageQualityUrl)
+                    }
+                })
             }
         }
         
