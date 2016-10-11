@@ -8,12 +8,12 @@ approximately 2+ hours in total
 ### Feature
 ##### Required
 * [x] User can view a list of movies currently playing in theaters from The Movie Database. Poster images must be loaded asynchronously.
-* [ ] User can view movie details by tapping on a cell.
+* [x] User can view movie details by tapping on a cell.
 * [ ] User sees an error message when there's a networking error. You may not use UIAlertController or a 3rd party library to display the error.
 * [ ] User can pull to refresh the movie list.
 
 ##### Optional
-* [ ] Add a tab bar for Now Playing or Top Rated movies. (high)
+* [x] Add a tab bar for Now Playing or Top Rated movies. (high)
 * [ ] Implement a UISegmentedControl to switch between a list view and a grid view. (high)
 * [ ] Add a search bar. (med)
 * [ ] All images fade in as they are loading. (low)
