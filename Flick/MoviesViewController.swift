@@ -74,6 +74,18 @@ class MoviesViewController: UIViewController {
             }
         }
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let sender = sender as? MovieTableViewCell {
+            guard let indexPath = tableView.indexPath(for: sender) else {
+                return
+            }
+            let movie = movies[indexPath.row]
+            if let detailViewController = segue.destination as? DetailViewController {
+                detailViewController.movie = movie
+            }
+        }
+    }
 }
 
 extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
