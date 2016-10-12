@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 import ARSLineProgress
+import SystemConfiguration
 
 
 class MoviesViewController: UIViewController {
@@ -17,6 +18,7 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var noNetworkConnectionLabel: UILabel!
 
     
     let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
@@ -28,19 +30,24 @@ class MoviesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-
         initDelegate()
-        
-        searchBar.delegate = self
-        
-        loadMovie()
+        initRefreshControl()
+        // TODO: handle refresh, and if possible, load offline data
+        if (connectedToNetwork()){
+            loadMovie(nil)
+        } else {
+            noNetworkConnectionLabel.alpha = 1
+            // Thanks to AntiStrike12
+            // stackoverflow.com/questions/28288476/fade-in-and-fade-out-in-animation-swift
+            UIView.animate(withDuration: 2, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.noNetworkConnectionLabel.alpha = 0
+            }, completion: nil )
+        }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         initUI()
-
     }
     
     
@@ -61,12 +68,19 @@ class MoviesViewController: UIViewController {
         //        collectionView.dataSource = self
     }
     
+    func initRefreshControl(){
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(loadMovie(_:)), for: .valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
+    }
+    
     func initUI(){
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         segmentedControl.frame.size.height = searchBar.frame.height
     }
     
-    func loadMovie(){
+    // TOOD: To make it "more correct", should not need refresh control
+    func loadMovie(_ refreshControl: UIRefreshControl? = nil){
         let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)"
         Alamofire
         .request(url)
@@ -80,6 +94,7 @@ class MoviesViewController: UIViewController {
                                 self.movies = results
                                 self.filteredMovies = self.movies
                                 self.tableView.reloadData()
+                                refreshControl?.endRefreshing()
                             }
                         }
                     }
@@ -112,6 +127,31 @@ class MoviesViewController: UIViewController {
             }
         }
     }
+    
+    func connectedToNetwork() -> Bool {
+        // Thanks to Martin R
+        // stackoverflow.com/questions/25623272/how-to-use-scnetworkreachability-in-swift/25623647#25623647
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+            }
+        }) else {
+            return false
+        }
+        
+        var flags : SCNetworkReachabilityFlags = []
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        
+        let isReachable = flags.contains(.reachable)
+        let needsConnection = flags.contains(.connectionRequired)
+        return (isReachable && !needsConnection)
+    }
 }
 
 extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -131,10 +171,10 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
             let lowImageQualityUrl = URL(string: "\(lowQualityImageBaseUrl)\(posterPath)")
             let highImageQualityUrl = URL(string: "\(highQualityImageBaseUrl)\(posterPath)")
             if let lowImageQualityUrl = lowImageQualityUrl {
-                cell.posterImageView.af_setImage(withURL: lowImageQualityUrl, completion: { response in
+                cell.posterImageView.af_setImage(withURL: lowImageQualityUrl, imageTransition: .crossDissolve(0.5), completion: { response in
                     // TODO: find some way to do it in cleaner way
                     if let highImageQualityUrl = highImageQualityUrl {
-                        cell.posterImageView.af_setImage(withURL: highImageQualityUrl)
+                        cell.posterImageView.af_setImage(withURL: highImageQualityUrl, imageTransition: .crossDissolve(0.5))
                     }
                 })
             }
