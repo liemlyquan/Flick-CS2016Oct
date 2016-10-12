@@ -31,12 +31,22 @@ class MoviesViewController: UIViewController {
         
 
         initDelegate()
-        initUI()
         
         searchBar.delegate = self
         
         loadMovie()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        initUI()
+
+    }
+    
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,6 +54,7 @@ class MoviesViewController: UIViewController {
     }
     
     func initDelegate(){
+        searchBar.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         //        collectionView.delegate = self
@@ -51,12 +62,7 @@ class MoviesViewController: UIViewController {
     }
     
     func initUI(){
-//        let oldSegmentedControlFrame = segmentedControl.frame
-//        let segmentedControlFrame = CGRect(x: oldSegmentedControlFrame.origin.x,
-//                                           y: oldSegmentedControlFrame.origin.y,
-//                                           width: oldSegmentedControlFrame.width,
-//                                           height: searchBar.frame.height)
-//        segmentedControl.frame = segmentedControlFrame
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         segmentedControl.frame.size.height = searchBar.frame.height
     }
     
@@ -72,6 +78,7 @@ class MoviesViewController: UIViewController {
                         if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                             if let results = responseDictionary["results"] as? [NSDictionary] {
                                 self.movies = results
+                                self.filteredMovies = self.movies
                                 self.tableView.reloadData()
                             }
                         }
@@ -109,12 +116,12 @@ class MoviesViewController: UIViewController {
 
 extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return filteredMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as! MovieTableViewCell
-        let movie = movies[indexPath.row]
+        let movie = filteredMovies[indexPath.row]
         // MARK: Since every movie has title and overview, it should be safe to group them together
         if let title = movie["title"] as? String, let overview = movie["overview"] as? String {
             cell.titleLabel.text = title
@@ -150,11 +157,12 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension MoviesViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            
+            filteredMovies = movies
         } else {
             filteredMovies = movies.filter({
-                if let title = $0["id"] as? String {
+                if let title = $0["title"] as? String, let overview = $0["overview"] as? String {
                     return title.range(of: searchText, options: .caseInsensitive) != nil
+                        || overview.range(of: searchText, options: .caseInsensitive) != nil
                 }
                 return false
             })
