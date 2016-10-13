@@ -11,6 +11,7 @@ import Alamofire
 import AlamofireImage
 import ARSLineProgress
 import SystemConfiguration
+import DZNEmptyDataSet
 
 
 class MoviesViewController: UIViewController {
@@ -21,9 +22,7 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var noNetworkConnectionLabel: UILabel!
 
     
-    let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-    let lowQualityImageBaseUrl = "https://image.tmdb.org/t/p/w45"
-    let highQualityImageBaseUrl  = "https://image.tmdb.org/t/p/original"
+
     var movies:[NSDictionary] =  []
     var filteredMovies:[NSDictionary] = []
     var endpoint = String()
@@ -64,6 +63,8 @@ class MoviesViewController: UIViewController {
         searchBar.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.emptyDataSetDelegate = self
+        tableView.emptyDataSetSource = self
         //        collectionView.delegate = self
         //        collectionView.dataSource = self
     }
@@ -81,7 +82,7 @@ class MoviesViewController: UIViewController {
     
     // TOOD: To make it "more correct", should not need refresh control
     func loadMovie(_ refreshControl: UIRefreshControl? = nil){
-        let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)"
+        let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(GlobalConstants.apiKey)"
         Alamofire
         .request(url)
         .validate()
@@ -160,26 +161,18 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as! MovieTableViewCell
-        let movie = filteredMovies[indexPath.row]
-        // MARK: Since every movie has title and overview, it should be safe to group them together
-        if let title = movie["title"] as? String, let overview = movie["overview"] as? String {
-            cell.titleLabel.text = title
-            cell.overviewLabel.text = overview
-        }
-        if let posterPath = movie["poster_path"] as? String {
-            let lowImageQualityUrl = URL(string: "\(lowQualityImageBaseUrl)\(posterPath)")
-            let highImageQualityUrl = URL(string: "\(highQualityImageBaseUrl)\(posterPath)")
-            if let lowImageQualityUrl = lowImageQualityUrl {
-                cell.posterImageView.af_setImage(withURL: lowImageQualityUrl, imageTransition: .crossDissolve(0.5), completion: { response in
-                    // TODO: find some way to do it in cleaner way
-                    if let highImageQualityUrl = highImageQualityUrl {
-                        cell.posterImageView.af_setImage(withURL: highImageQualityUrl, imageTransition: .crossDissolve(0.5))
-                    }
-                })
-            }
-        }
         
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as! MovieTableViewCell
+        
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.green
+        cell.selectedBackgroundView = backgroundView
+        
+        
+        let movie = filteredMovies[indexPath.row]
+        cell.movie = movie
         return cell
     }
 }
@@ -191,6 +184,15 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
      
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return UICollectionViewCell()
+    }
+}
+
+extension MoviesViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
+        let view = Bundle.main.loadNibNamed("EmptyDataView", owner: self, options: nil)?.last as! UIView
+        tableView.tableFooterView = UIView(frame: .zero)
+        return view
+        
     }
 }
 

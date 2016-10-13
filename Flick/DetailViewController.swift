@@ -13,22 +13,33 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var infoView: UIView!
+
 
     var movie:NSDictionary!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initData()
+        initUI()
+
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    func initUI(){
+        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: infoView.frame.origin.y + infoView.frame.height * 1.25)
+        posterImageView.frame.size.height = scrollView.contentSize.height
+        overviewLabel.sizeToFit()
+
+    }
+    
     func initData() {
         guard let title = movie["title"] as? String,
             let overview = movie["overview"] as? String else {
-                // TODO: maybe display some error message her
                 return
         }
         titleLabel.text = title
@@ -42,7 +53,5 @@ class DetailViewController: UIViewController {
         if let posterURL = URL(string: "\(baseURL)\(posterPath)") {
             posterImageView.af_setImage(withURL: posterURL)
         }
-        
-
     }
 }

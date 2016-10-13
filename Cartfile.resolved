@@ -1,3 +1,4 @@
 github "soberman/ARSLineProgress" "2.0.1"
 github "Alamofire/Alamofire" "4.0.1"
+github "dzenbot/DZNEmptyDataSet" "v1.8.1"
 github "Alamofire/AlamofireImage" "3.1.0"

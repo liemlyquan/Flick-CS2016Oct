@@ -3,7 +3,7 @@
 A quick program to show now playing and top rated movie based on the database from [The Movie Database API](http://docs.themoviedb.apiary.io/)
 
 ### Time spent:
-approximately 2+2+! hours in total
+approximately 2+2+2 hours in total
 
 ### Feature
 ##### Required
@@ -18,10 +18,13 @@ approximately 2+2+! hours in total
 * [x] Add a search bar. (med)
 * [x] All images fade in as they are loading. (low)
 * [x] For the large poster, load the low-res image first and switch to high-res when complete. (low)
-* [ ] Customize the highlight and selection effect of the cell. (low)
+* [x] Customize the highlight and selection effect of the cell. (low)
 * [ ] Customize the navigation bar. (low)
 
 Walkthrough of the app
 ![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick/master/gif/Flick.gif)
 
 GIF created with LiceCap.
+
+
+<div>Icons made by <a href="http://www.flaticon.com/authors/alfredo-hernandez" title="Alfredo Hernandez">Alfredo Hernandez</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
