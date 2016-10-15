@@ -26,7 +26,7 @@ approximately 10 hours in total
 * DZNEmptyDataSet incompatibility with Refresh Control. Cannot use pull to refresh when data set is empty
 
 ### Walkthrough of the app
-![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick-CS2016Oct/master/gif/Flick.gif)
+![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick-CS2016Oct/blob/master/gif/Flick.gif)
 
 GIF created with LiceCap.
 
