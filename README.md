@@ -3,7 +3,7 @@
 A quick program to show now playing and top rated movie based on the database from [The Movie Database API](http://docs.themoviedb.apiary.io/)
 
 ### Time spent:
-approximately 2+2+2 hours in total
+approximately 10 hours in total
 
 ### Feature
 ##### Required
