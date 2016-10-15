@@ -117,7 +117,7 @@ class MoviesViewController: UIViewController {
                     case .failure(let error):
                         print(error.localizedDescription)
                         refreshControl?.endRefreshing()
-                        SVProgressHUD.showError(withStatus: "Error connecting to server")
+                        SVProgressHUD.showError(withStatus: "Error getting data")
                 }
             }
         } else {

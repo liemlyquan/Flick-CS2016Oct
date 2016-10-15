@@ -3,7 +3,7 @@
 A quick program to show now playing and top rated movie based on the database from [The Movie Database API](http://docs.themoviedb.apiary.io/)
 
 ### Time spent:
-approximately 10 hours in total
+approximately 11 hours in total
 
 ### Feature
 ##### Required
@@ -24,6 +24,10 @@ approximately 10 hours in total
 ### Known issues
 * High quality image may not be used in many cases, especially when after filtered by search bar
 * DZNEmptyDataSet incompatibility with Refresh Control. Cannot use pull to refresh when data set is empty
+* Refresh control cannot be added to BOTH table view and collection view at the same time (even tried added two different instance)
+
+### Reflection
+* Should have spend more time trying to perfect the features rather than rushing through all the features. :(
 
 ### Walkthrough of the app
 ![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick-CS2016Oct/master/Flick.gif)
