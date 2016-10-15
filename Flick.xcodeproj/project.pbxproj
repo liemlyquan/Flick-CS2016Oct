@@ -15,12 +15,12 @@
 		9981048C1DABC82000002BC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9981048A1DABC82000002BC7 /* LaunchScreen.storyboard */; };
 		998104941DABC9D000002BC7 /* MoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998104931DABC9D000002BC7 /* MoviesViewController.swift */; };
 		99A0E91B1DAE95E00070AC84 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0E91A1DAE95E00070AC84 /* GlobalConstants.swift */; };
-		99AA76A11DAE9B1F0019D227 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99AA76A01DAE9B1F0019D227 /* DZNEmptyDataSet.framework */; };
 		99AA76A31DAE9B7D0019D227 /* EmptyDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99AA76A21DAE9B7D0019D227 /* EmptyDataView.xib */; };
 		99BE6E8B1DAD1BB8002B601F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E881DAD1BB8002B601F /* Alamofire.framework */; };
 		99BE6E8C1DAD1BB8002B601F /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E891DAD1BB8002B601F /* AlamofireImage.framework */; };
-		99BE6E8D1DAD1BB8002B601F /* ARSLineProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E8A1DAD1BB8002B601F /* ARSLineProgress.framework */; };
 		99CC6DB21DB1D5D4004FA6CB /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DB11DB1D5D4004FA6CB /* MovieCollectionViewCell.swift */; };
+		99CC6DB31DB2779C004FA6CB /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99AA76A01DAE9B1F0019D227 /* DZNEmptyDataSet.framework */; };
+		99CC6DB51DB2787F004FA6CB /* SVProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99CC6DB41DB2787F004FA6CB /* SVProgressHUD.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,8 +51,8 @@
 		99AA76A21DAE9B7D0019D227 /* EmptyDataView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyDataView.xib; sourceTree = "<group>"; };
 		99BE6E881DAD1BB8002B601F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		99BE6E891DAD1BB8002B601F /* AlamofireImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireImage.framework; path = Carthage/Build/iOS/AlamofireImage.framework; sourceTree = "<group>"; };
-		99BE6E8A1DAD1BB8002B601F /* ARSLineProgress.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARSLineProgress.framework; path = Carthage/Build/iOS/ARSLineProgress.framework; sourceTree = "<group>"; };
 		99CC6DB11DB1D5D4004FA6CB /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		99CC6DB41DB2787F004FA6CB /* SVProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVProgressHUD.framework; path = Carthage/Build/iOS/SVProgressHUD.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,8 +62,8 @@
 			files = (
 				99BE6E8B1DAD1BB8002B601F /* Alamofire.framework in Frameworks */,
 				99BE6E8C1DAD1BB8002B601F /* AlamofireImage.framework in Frameworks */,
-				99BE6E8D1DAD1BB8002B601F /* ARSLineProgress.framework in Frameworks */,
-				99AA76A11DAE9B1F0019D227 /* DZNEmptyDataSet.framework in Frameworks */,
+				99CC6DB31DB2779C004FA6CB /* DZNEmptyDataSet.framework in Frameworks */,
+				99CC6DB51DB2787F004FA6CB /* SVProgressHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,10 +108,10 @@
 		9984DDD51DABD3E60049C758 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				99CC6DB41DB2787F004FA6CB /* SVProgressHUD.framework */,
 				99AA76A01DAE9B1F0019D227 /* DZNEmptyDataSet.framework */,
 				99BE6E881DAD1BB8002B601F /* Alamofire.framework */,
 				99BE6E891DAD1BB8002B601F /* AlamofireImage.framework */,
-				99BE6E8A1DAD1BB8002B601F /* ARSLineProgress.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -196,8 +196,8 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AlamofireImage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ARSLineProgress.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/DZNEmptyDataSet.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SVProgressHUD.framework",
 			);
 			outputPaths = (
 			);

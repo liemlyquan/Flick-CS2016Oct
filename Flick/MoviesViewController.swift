@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 import AlamofireImage
-import ARSLineProgress
+import SVProgressHUD
 import SystemConfiguration
 import DZNEmptyDataSet
 
@@ -91,8 +91,11 @@ class MoviesViewController: UIViewController {
     }
     
     func loadMovie(_ refreshControl: UIRefreshControl? = nil){
+        
         if (connectedToNetwork()){
             let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(GlobalConstants.apiKey)"
+            SVProgressHUD.show()
+            
             Alamofire
                 .request(url)
                 .validate()
@@ -107,12 +110,14 @@ class MoviesViewController: UIViewController {
                                     self.tableView.reloadData()
                                     self.collectionView.reloadData()
                                     refreshControl?.endRefreshing()
+                                    SVProgressHUD.showSuccess(withStatus: "Done")
                                 }
                             }
                         }
                     case .failure(let error):
                         print(error.localizedDescription)
                         refreshControl?.endRefreshing()
+                        SVProgressHUD.showError(withStatus: "Error connecting to server")
                 }
             }
         } else {
