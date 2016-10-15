@@ -20,6 +20,7 @@
 		99BE6E8B1DAD1BB8002B601F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E881DAD1BB8002B601F /* Alamofire.framework */; };
 		99BE6E8C1DAD1BB8002B601F /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E891DAD1BB8002B601F /* AlamofireImage.framework */; };
 		99BE6E8D1DAD1BB8002B601F /* ARSLineProgress.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99BE6E8A1DAD1BB8002B601F /* ARSLineProgress.framework */; };
+		99CC6DB21DB1D5D4004FA6CB /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CC6DB11DB1D5D4004FA6CB /* MovieCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		99BE6E881DAD1BB8002B601F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		99BE6E891DAD1BB8002B601F /* AlamofireImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireImage.framework; path = Carthage/Build/iOS/AlamofireImage.framework; sourceTree = "<group>"; };
 		99BE6E8A1DAD1BB8002B601F /* ARSLineProgress.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARSLineProgress.framework; path = Carthage/Build/iOS/ARSLineProgress.framework; sourceTree = "<group>"; };
+		99CC6DB11DB1D5D4004FA6CB /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				997F81541DAD4301004554C8 /* DetailViewController.swift */,
 				99A0E91A1DAE95E00070AC84 /* GlobalConstants.swift */,
 				99AA76A21DAE9B7D0019D227 /* EmptyDataView.xib */,
+				99CC6DB11DB1D5D4004FA6CB /* MovieCollectionViewCell.swift */,
 			);
 			path = Flick;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 				TargetAttributes = {
 					9981047D1DABC81F00002BC7 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = C4K2QZSFW6;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -211,6 +215,7 @@
 				998104821DABC82000002BC7 /* AppDelegate.swift in Sources */,
 				998104941DABC9D000002BC7 /* MoviesViewController.swift in Sources */,
 				99A0E91B1DAE95E00070AC84 /* GlobalConstants.swift in Sources */,
+				99CC6DB21DB1D5D4004FA6CB /* MovieCollectionViewCell.swift in Sources */,
 				995AF80B1DABEC57003DEE60 /* MovieTableViewCell.swift in Sources */,
 				997F81551DAD4301004554C8 /* DetailViewController.swift in Sources */,
 			);
@@ -333,7 +338,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C4K2QZSFW6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -350,7 +355,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C4K2QZSFW6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",

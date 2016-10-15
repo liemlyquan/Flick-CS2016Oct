@@ -14,15 +14,19 @@ approximately 2+2+2 hours in total
 
 ##### Optional
 * [x] Add a tab bar for Now Playing or Top Rated movies. (high)
-* [ ] Implement a UISegmentedControl to switch between a list view and a grid view. (high)
+* [x] Implement a UISegmentedControl to switch between a list view and a grid view. (high)
 * [x] Add a search bar. (med)
 * [x] All images fade in as they are loading. (low)
 * [x] For the large poster, load the low-res image first and switch to high-res when complete. (low)
 * [x] Customize the highlight and selection effect of the cell. (low)
-* [ ] Customize the navigation bar. (low)
+* [x] Customize the navigation bar. (low)
 
-Walkthrough of the app
-![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick/master/gif/Flick.gif)
+### Known issues
+* High quality image may not be used in many cases, especially when after filtered by search bar
+* DZNEmptyDataSet incompatibility with Refresh Control. Cannot use pull to refresh when data set is empty
+
+### Walkthrough of the app
+![App Walkthrough](https://raw.githubusercontent.com/liemlyquan/Flick-CS2016Oct/master/gif/Flick.gif)
 
 GIF created with LiceCap.
 

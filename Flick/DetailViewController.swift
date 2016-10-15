@@ -31,9 +31,12 @@ class DetailViewController: UIViewController {
     }
     
     func initUI(){
-        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: infoView.frame.origin.y + infoView.frame.height * 1.25)
-        posterImageView.frame.size.height = scrollView.contentSize.height
         overviewLabel.sizeToFit()
+        // MARK: somehow this feel like another version of auto layout
+        infoView.frame.size.height = overviewLabel.frame.maxY + 30
+        scrollView.contentSize = CGSize(width: scrollView.frame.width, height: infoView.frame.origin.y + infoView.frame.height + 10)
+        posterImageView.frame.size.height = scrollView.contentSize.height
+        
 
     }
     

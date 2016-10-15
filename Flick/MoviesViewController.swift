@@ -18,10 +18,7 @@ class MoviesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var noNetworkConnectionLabel: UILabel!
-
-    
 
     var movies:[NSDictionary] =  []
     var filteredMovies:[NSDictionary] = []
@@ -29,32 +26,38 @@ class MoviesViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initUI()
         initDelegate()
         initRefreshControl()
-        // TODO: handle refresh, and if possible, load offline data
-        if (connectedToNetwork()){
-            loadMovie(nil)
-        } else {
-            noNetworkConnectionLabel.alpha = 1
-            // Thanks to AntiStrike12
-            // stackoverflow.com/questions/28288476/fade-in-and-fade-out-in-animation-swift
-            UIView.animate(withDuration: 2, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                self.noNetworkConnectionLabel.alpha = 0
-            }, completion: nil )
-        }
-        
+        initGestureRecognizer()
+        loadMovie()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        initUI()
     }
     
-    
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let sender = sender as? MovieTableViewCell {
+            guard let indexPath = tableView.indexPath(for: sender) else {
+                return
+            }
+            let movie = filteredMovies[indexPath.row]
+            if let detailViewController = segue.destination as? DetailViewController {
+                detailViewController.movie = movie
+            }
+        }
+        if let sender = sender as? MovieCollectionViewCell {
+            guard let indexPath = collectionView.indexPath(for: sender) else {
+                return
+            }
+            let movie = filteredMovies[indexPath.row]
+            if let detailViewController = segue.destination as? DetailViewController {
+                detailViewController.movie = movie
+            }
+        }
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -65,8 +68,9 @@ class MoviesViewController: UIViewController {
         tableView.dataSource = self
         tableView.emptyDataSetDelegate = self
         tableView.emptyDataSetSource = self
-        //        collectionView.delegate = self
-        //        collectionView.dataSource = self
+        tableView.tableFooterView = UIView(frame: .zero)
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
     func initRefreshControl(){
@@ -76,57 +80,63 @@ class MoviesViewController: UIViewController {
     }
     
     func initUI(){
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        segmentedControl.frame.size.height = searchBar.frame.height
+        navigationItem.titleView = searchBar
+        self.navigationController?.navigationBar.backgroundColor = UIColor.black
+        self.noNetworkConnectionLabel.layer.zPosition = 1
     }
     
-    // TOOD: To make it "more correct", should not need refresh control
+    func initGestureRecognizer(){
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(switchDisplayMode))
+        self.view.addGestureRecognizer(pinchGesture)
+    }
+    
     func loadMovie(_ refreshControl: UIRefreshControl? = nil){
-        let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(GlobalConstants.apiKey)"
-        Alamofire
-        .request(url)
-        .validate()
-        .responseJSON { response in
-            switch response.result {
-                case .success(_):
-                    if let data = response.data {
-                        if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                            if let results = responseDictionary["results"] as? [NSDictionary] {
-                                self.movies = results
-                                self.filteredMovies = self.movies
-                                self.tableView.reloadData()
-                                refreshControl?.endRefreshing()
-                            }
-                        }
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    // MARK: Only print message "defined" error
-                    if let statusCode = response.response?.statusCode {
-                        if (400...499 ~=  statusCode){
-                            if let data = response.data {
-                                if let errorDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                                    if let errorMessage = errorDictionary["status_message"] as? String {
-                                        print(errorMessage)
-                                    }
+        if (connectedToNetwork()){
+            let url = "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(GlobalConstants.apiKey)"
+            Alamofire
+                .request(url)
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .success(_):
+                        if let data = response.data {
+                            if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                                if let results = responseDictionary["results"] as? [NSDictionary] {
+                                    self.movies = results
+                                    self.filteredMovies = self.movies
+                                    self.tableView.reloadData()
+                                    self.collectionView.reloadData()
+                                    refreshControl?.endRefreshing()
                                 }
                             }
                         }
-                    }
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        refreshControl?.endRefreshing()
+                }
             }
+        } else {
+            refreshControl?.endRefreshing()
+            self.noNetworkConnectionLabel.alpha = 1
+            UIView.animate(withDuration: 2, delay: 1, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.noNetworkConnectionLabel.alpha = 0
+                }, completion: nil )
         }
-    }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let sender = sender as? MovieTableViewCell {
-            guard let indexPath = tableView.indexPath(for: sender) else {
-                return
-            }
-            let movie = movies[indexPath.row]
-            if let detailViewController = segue.destination as? DetailViewController {
-                detailViewController.movie = movie
+    }
+    
+    func switchDisplayMode(sender: UIPinchGestureRecognizer){
+        if (sender.state == .ended){
+            let velocity = sender.velocity
+            if velocity < 0 {
+                collectionView.isHidden = true
+                tableView.isHidden = false
+            } else if (velocity > 0){
+                collectionView.isHidden = false
+                tableView.isHidden = true
             }
         }
+        
     }
     
     func connectedToNetwork() -> Bool {
@@ -161,38 +171,38 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as! MovieTableViewCell
-        
-        
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor.green
         cell.selectedBackgroundView = backgroundView
-        
-        
+        let movie = filteredMovies[indexPath.row]
+        cell.movie = movie
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return filteredMovies.count
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.green
+        cell.selectedBackgroundView = backgroundView
         let movie = filteredMovies[indexPath.row]
         cell.movie = movie
         return cell
     }
 }
 
-extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
-    }
-     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
-    }
-}
-
 extension MoviesViewController: DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
-    func customView(forEmptyDataSet scrollView: UIScrollView!) -> UIView! {
-        let view = Bundle.main.loadNibNamed("EmptyDataView", owner: self, options: nil)?.last as! UIView
-        tableView.tableFooterView = UIView(frame: .zero)
-        return view
-        
+    func title(forEmptyDataSet scrollView: UIScrollView!) -> NSAttributedString! {
+        return NSAttributedString(string: "No results found")
     }
 }
 
@@ -210,5 +220,6 @@ extension MoviesViewController: UISearchBarDelegate {
             })
         }
         tableView.reloadData()
+        collectionView.reloadData()
     }
 }

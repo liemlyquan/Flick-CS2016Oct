@@ -1,27 +1,19 @@
 //
-//  MovieTableViewCell.swift
+//  MovieCollectionViewCell.swift
 //  Flick
 //
-//  Created by Liem Ly Quan on 10/10/16.
+//  Created by Liem Ly Quan on 10/15/16.
 //  Copyright © 2016 liemlyquan. All rights reserved.
 //
 
 import UIKit
-import AlamofireImage
 
-class MovieTableViewCell: UITableViewCell {
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var overviewLabel: UILabel!
+class MovieCollectionViewCell: UICollectionViewCell {
+
     @IBOutlet weak var posterImageView: UIImageView!
-
+    
     var movie:NSDictionary! {
         didSet {
-            // MARK: Since every movie has title and overview, it should be safe to group them together
-            if let title = movie["title"] as? String, let overview = movie["overview"] as? String {
-                titleLabel.text = title
-                overviewLabel.text = overview
-            }
-                    
             if let posterPath = movie["poster_path"] as? String {
                 let lowImageQualityUrl = URL(string: "\(GlobalConstants.lowQualityImageBaseUrl)\(posterPath)")
                 let highImageQualityUrl = URL(string: "\(GlobalConstants.highQualityImageBaseUrl)\(posterPath)")
@@ -36,13 +28,4 @@ class MovieTableViewCell: UITableViewCell {
             }
         }
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
 }
